@@ -1,0 +1,23 @@
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-family: monospace;
+    font-size: 62.5%;
+}
+
+body {
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.canvas {
+    background-color: #565656;
+}
