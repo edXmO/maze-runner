@@ -4,6 +4,7 @@ const ctx = canvas.getContext('2d');
 const WIDTH = 400;
 const HEIGHT = 400;
 const RES = 40;
+const maxFps = 5;
 
 canvas.style.height = WIDTH;
 canvas.style.width = HEIGHT;
@@ -12,6 +13,7 @@ const rows = HEIGHT / RES;
 const cols = WIDTH / RES;
 
 const grid = [];
+let frameTime;
 let current;
 
 class Cell {
@@ -41,7 +43,6 @@ class Cell {
             topNeighbor,
             leftNeighbor
         ].filter(neighbor => neighbor && !neighbor.visited);
-
 
         if (neighbors.length) {
             const rand = Math.floor(Math.random() * neighbors.length);
@@ -132,7 +133,11 @@ const drawGrid = () => {
     }
 
     current.visited = true;
-    current.isNeighborVisited();
+    next = current.isNeighborVisited();
+    if (next) {
+        next.visited = true;
+        current = next;
+    }
 }
 
 const fillGrid = () => {
@@ -148,13 +153,28 @@ const fillGrid = () => {
 }
 
 
-const init = () => {
+const setup = () => {
     fillGrid();
-
     drawGrid();
 }
 
-init();
+setup();
+
+const tick = (timestamp) => {
+    if (timestamp < frameTime + (1000 / maxFps)) {
+        animationFrameID = requestAnimationFrame(tick);
+        return;
+    }
+    frameTime = timestamp;
+
+    drawGrid();
+
+    animationFrameID = requestAnimationFrame(tick);
+};
+
+tick();
+
+
 
 
 
