@@ -12,6 +12,7 @@ const rows = HEIGHT / RES;
 const cols = WIDTH / RES;
 
 const grid = [];
+let current;
 
 class Cell {
     constructor(x, y, w, h) {
@@ -28,18 +29,19 @@ class Cell {
         };
     }
 
-    findIndex(x, y) {
-        if (x < 0 || y < 0 || x > cols < 1 || y > rows - 1) return -1;
-        return x + y * cols;
-    }
-
     isNeighborVisited() {
+        const topNeighbor = grid[grid.findIndex(cell => cell.x === this.x && cell.y == this.y - this.h)]
+        const bottomNeighbor = grid[grid.findIndex(cell => cell.x === this.x && cell.y === this.y + this.h)];
+        const rightNeighbor = grid[grid.findIndex(cell => cell.x === this.x + this.w && cell.y === this.y)];
+        const leftNeighbor = grid[grid.findIndex(cell => cell.x === this.x - this.w && cell.y + this.h === this.y + this.h)]
+
         const neighbors = [
-            grid[this.findIndex(i, j + 1)], // bottom neighbor
-            grid[this.findIndex(i + 1, j)], // right neighbor
-            grid[this.findIndex(i, j - 1)], // top neighbor
-            grid[this.findIndex(i - 1, j)]  // left neighbor
-        ].filter(neighbor => !neighbor.visited);
+            bottomNeighbor,
+            rightNeighbor,
+            topNeighbor,
+            leftNeighbor
+        ].filter(neighbor => neighbor && !neighbor.visited);
+
 
         if (neighbors.length) {
             const rand = Math.floor(Math.random() * neighbors.length);
@@ -51,8 +53,6 @@ class Cell {
         // 1. Given a current cell as a parameter,
         // 2. Mark the current cell as visited
         // 3. While the current cell has any unvisited neighbour cells
-        // Neighbors
-        // 
         // 4. Choose one of the unvisited neighbours
         // 5. Remove the wall between the current cell and the chosen cell
         // 6. Invoke the routine recursively for a chosen cell
@@ -130,6 +130,9 @@ const drawGrid = () => {
     for (let i = 0; i < grid.length; i++) {
         grid[i].show();
     }
+
+    current.visited = true;
+    current.isNeighborVisited();
 }
 
 const fillGrid = () => {
@@ -139,13 +142,14 @@ const fillGrid = () => {
             grid.push(cell);
         }
     }
+
+    current = grid[0];
+    current.visited = true;
 }
 
 
 const init = () => {
     fillGrid();
-
-    grid[0].visited = true;
 
     drawGrid();
 }
