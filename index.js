@@ -11,7 +11,7 @@ canvas.style.width = HEIGHT;
 
 const rows = HEIGHT / RES;
 const cols = WIDTH / RES;
-let currentCellColor = "#d8b1d4";
+let currentCellColor = "white";
 
 const grid = [];
 let stack = [];
@@ -167,6 +167,7 @@ const drawGrid = () => {
     for (let i = 0; i < grid.length; i++) {
         grid[i].show();
     }
+    current.cellColor = currentCellColor;
     // 1.1 Mark it as visited
     current.visited = true;
     // 2. Check its neighbors
@@ -174,7 +175,6 @@ const drawGrid = () => {
     next = current.isNeighborVisited();
     // 3. Choose one of the neighbours of the current cell
     // that has not been visited
-    current.cellColor = currentCellColor;
     if (next) {
         stack.push(current);
         next.visited = true;
@@ -184,6 +184,7 @@ const drawGrid = () => {
         current = next;
     } if (!next && stack.length) {
         current = stack.pop();
+        current.cellColor = currentCellColor;
         // current.cellColor = currentCellColor;
     }
 }

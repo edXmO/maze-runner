@@ -20,7 +20,8 @@ body {
 }
 
 .canvas {
-    background-color: #565656;
+    border: 0.1rem solid black;
+    background-color: black;
 }
 
 .container {
