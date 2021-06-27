@@ -4,7 +4,7 @@ const ctx = canvas.getContext('2d');
 const WIDTH = 400;
 const HEIGHT = 400;
 const RES = 20;
-const maxFps = 20;
+const maxFps = 30;
 
 canvas.style.height = WIDTH;
 canvas.style.width = HEIGHT;
@@ -14,8 +14,10 @@ const cols = WIDTH / RES;
 let currentCellColor = "#d8b1d4";
 
 const grid = [];
+let stack = [];
 let frameTime;
 let current;
+let cell;
 
 class Cell {
     constructor(x, y, w, h) {
@@ -31,7 +33,6 @@ class Cell {
             top: true,
             left: true
         };
-
     }
 
     isNeighborVisited() {
@@ -162,25 +163,28 @@ const fillGrid = () => {
     current = grid[0];
 }
 
-
 const drawGrid = () => {
     for (let i = 0; i < grid.length; i++) {
         grid[i].show();
     }
-
     // 1.1 Mark it as visited
     current.visited = true;
     // 2. Check its neighbors
+    // 1.2 Push the current cell to the stack
     next = current.isNeighborVisited();
     // 3. Choose one of the neighbours of the current cell
     // that has not been visited
+    current.cellColor = currentCellColor;
     if (next) {
-        current.cellColor = currentCellColor;
+        stack.push(current);
         next.visited = true;
+        // 4. Remove the wall between 
+        // the current cell and the next cell        
         current.removeWalls(next);
         current = next;
-        // 4. Remove the wall between 
-        // the current cell and the next cell
+    } if (!next && stack.length) {
+        current = stack.pop();
+        // current.cellColor = currentCellColor;
     }
 }
 
