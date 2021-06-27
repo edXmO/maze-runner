@@ -16,8 +16,28 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #204ac8;
 }
 
 .canvas {
     background-color: #565656;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.heading {
+    padding: 2.5rem;
+}
+
+.heading__link,
+.heading__link:active,
+.heading__link:focus {
+    font-size: 2.5rem;
+    color: white;
+    text-decoration: none;
 }

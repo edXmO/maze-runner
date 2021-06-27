@@ -4,13 +4,14 @@ const ctx = canvas.getContext('2d');
 const WIDTH = 400;
 const HEIGHT = 400;
 const RES = 20;
-const maxFps = 5;
+const maxFps = 20;
 
 canvas.style.height = WIDTH;
 canvas.style.width = HEIGHT;
 
 const rows = HEIGHT / RES;
 const cols = WIDTH / RES;
+let currentCellColor = "#d8b1d4";
 
 const grid = [];
 let frameTime;
@@ -23,12 +24,14 @@ class Cell {
         this.w = w;
         this.h = h;
         this.visited = false;
+        this.cellColor = 'purple';
         this.walls = {
             bottom: true,
             right: true,
             top: true,
             left: true
         };
+
     }
 
     isNeighborVisited() {
@@ -62,13 +65,13 @@ class Cell {
     }
 
     show() {
-        ctx.strokeStyle = 'white';
+        ctx.strokeStyle = 'black';
         ctx.beginPath();
 
         if (this.visited) {
             ctx.beginPath();
             ctx.moveTo(this.x, this.y);
-            ctx.fillStyle = 'royalblue';
+            ctx.fillStyle = this.cellColor;
             ctx.fillRect(this.x, this.y, this.w, this.h);
         }
 
@@ -120,7 +123,7 @@ class Cell {
         }
     }
 
-    drawSide(rand) {
+    _drawSide(rand) {
         ctx.strokeStyle = '#565656';
         ctx.lineWidth = 2
         ctx.beginPath();
@@ -172,6 +175,7 @@ const drawGrid = () => {
     // 3. Choose one of the neighbours of the current cell
     // that has not been visited
     if (next) {
+        current.cellColor = currentCellColor;
         next.visited = true;
         current.removeWalls(next);
         current = next;
