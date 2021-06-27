@@ -3,7 +3,7 @@ const ctx = canvas.getContext('2d');
 
 const WIDTH = 400;
 const HEIGHT = 400;
-const RES = 40;
+const RES = 20;
 const maxFps = 5;
 
 canvas.style.height = WIDTH;
@@ -32,6 +32,15 @@ class Cell {
     }
 
     isNeighborVisited() {
+        // https://en.wikipedia.org/wiki/Maze_generation_algorithm
+        // Recursive implementation
+        // 1. Given a current cell as a parameter,
+        // 2. Mark the current cell as visited
+        // 3. While the current cell has any unvisited neighbour cells
+        // 4. Choose one of the unvisited neighbours
+        // 5. Remove the wall between the current cell and the chosen cell
+        // 6. Invoke the routine recursively for a chosen cell
+
         const topNeighbor = grid[grid.findIndex(cell => cell.x === this.x && cell.y == this.y - this.h)]
         const bottomNeighbor = grid[grid.findIndex(cell => cell.x === this.x && cell.y === this.y + this.h)];
         const rightNeighbor = grid[grid.findIndex(cell => cell.x === this.x + this.w && cell.y === this.y)];
@@ -50,13 +59,6 @@ class Cell {
         } else {
             return undefined;
         }
-        // recursive implementation
-        // 1. Given a current cell as a parameter,
-        // 2. Mark the current cell as visited
-        // 3. While the current cell has any unvisited neighbour cells
-        // 4. Choose one of the unvisited neighbours
-        // 5. Remove the wall between the current cell and the chosen cell
-        // 6. Invoke the routine recursively for a chosen cell
     }
 
     show() {
@@ -66,7 +68,7 @@ class Cell {
         if (this.visited) {
             ctx.beginPath();
             ctx.moveTo(this.x, this.y);
-            ctx.fillStyle = 'yellow';
+            ctx.fillStyle = 'royalblue';
             ctx.fillRect(this.x, this.y, this.w, this.h);
         }
 
@@ -99,6 +101,25 @@ class Cell {
         }
     }
 
+    removeWalls(next) {
+        const x = this.x - next.x;
+        const y = this.y - next.y;
+        if (x == RES) {
+            this.walls.left = false;
+            next.walls.right = false;
+        } else if (x == -RES) {
+            this.walls.right = false;
+            next.walls.left = false;
+        }
+        if (y == RES) {
+            this.walls.top = false;
+            next.walls.bottom = false;
+        } else if (y == -RES) {
+            this.walls.bottom = false;
+            next.walls.top = false;
+        }
+    }
+
     drawSide(rand) {
         ctx.strokeStyle = '#565656';
         ctx.lineWidth = 2
@@ -127,19 +148,6 @@ class Cell {
     }
 }
 
-const drawGrid = () => {
-    for (let i = 0; i < grid.length; i++) {
-        grid[i].show();
-    }
-
-    current.visited = true;
-    next = current.isNeighborVisited();
-    if (next) {
-        next.visited = true;
-        current = next;
-    }
-}
-
 const fillGrid = () => {
     for (let x = 0; x < rows; x++) {
         for (let y = 0; y < cols; y++) {
@@ -147,11 +155,30 @@ const fillGrid = () => {
             grid.push(cell);
         }
     }
-
+    // 1. Choose the initial cell
     current = grid[0];
-    current.visited = true;
 }
 
+
+const drawGrid = () => {
+    for (let i = 0; i < grid.length; i++) {
+        grid[i].show();
+    }
+
+    // 1.1 Mark it as visited
+    current.visited = true;
+    // 2. Check its neighbors
+    next = current.isNeighborVisited();
+    // 3. Choose one of the neighbours of the current cell
+    // that has not been visited
+    if (next) {
+        next.visited = true;
+        current.removeWalls(next);
+        current = next;
+        // 4. Remove the wall between 
+        // the current cell and the next cell
+    }
+}
 
 const setup = () => {
     fillGrid();
@@ -173,9 +200,3 @@ const tick = (timestamp) => {
 };
 
 tick();
-
-
-
-
-
-
