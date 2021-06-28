@@ -12,7 +12,7 @@ html {
 }
 
 body {
-    height: 90vh;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -32,7 +32,7 @@ body {
 }
 
 .heading {
-    padding: 2.5rem;
+    padding: 2rem;
 }
 
 .heading__link,
@@ -41,4 +41,63 @@ body {
     font-size: 2.5rem;
     color: white;
     text-decoration: none;
+}
+
+.controls {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 2.5rem;
+    /* padding: 2.5rem 10rem; */
+}
+
+.btn,
+.btn:focus {
+    width: 7.5rem;
+    height: 5rem;
+    border-radius: 7px;
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    box-shadow: 7px 7px 17px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 7px 7px 17px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 7px 7px 17px rgba(0, 0, 0, 0.5);
+    transition: all 200ms ease-in-out;
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: black;
+    font-family: monospace;
+}
+
+.btn:hover {
+    background-color: darkgrey;
+}
+
+.btn:active {
+    transform: scale(0.9);
+}
+
+.copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem 0;
+}
+
+.copy__link {
+    text-decoration: none;
+}
+
+.copy__text {
+    font-size: 1.6rem;
+    padding-top: 0.5rem;
+    font-weight: bold;
+}
+
+.copy__icon {
+    height: 3.5rem;
+    width: 3.5rem;
 }
