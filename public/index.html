@@ -20,7 +20,24 @@
             <button class="btn controls__start">Start</button>
             <button class="btn controls__stop">Stop</button>
             <button class="btn controls__reset">Reset</button>
-            <input class="controls__velocity" type="range" min="1" max="50" step="1" placeholder="Speed" />
+            <div class="controls__speed">
+                <label class="controls__speed--label" for="speed">Speed</label>
+                <input class="controls__velocity" list="tickmarks" name="speed" type="range" value="30" step="1"
+                    placeholder="Speed">
+                <datalist id="tickmarks">
+                    <option value="0">
+                    <option value="10">
+                    <option value="20">
+                    <option value="30">
+                    <option value="40">
+                    <option value="50">
+                    <option value="60">
+                    <option value="70">
+                    <option value="80">
+                    <option value="90">
+                    <option value="100">
+                </datalist>
+            </div>
         </div>
         <canvas class="canvas" height="400" width="400"></canvas>
         <div class='copy'>

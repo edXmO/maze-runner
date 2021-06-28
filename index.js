@@ -8,11 +8,11 @@ const ctx = canvas.getContext('2d');
 const startBtn = document.querySelector('.controls__start');
 const stopBtn = document.querySelector('.controls__stop');
 const resetBtn = document.querySelector('.controls__reset');
+const speed = document.querySelector('.controls__velocity');
 
 const WIDTH = 400;
 const HEIGHT = 400;
 const RES = 20;
-const maxFps = 30;
 
 canvas.style.height = WIDTH;
 canvas.style.width = HEIGHT;
@@ -24,14 +24,17 @@ let currentCellColor = 'black';
 let grid = [];
 let stack = [];
 let frameTime;
+let maxFps = parseInt(speed.value);
 let current;
 let cell;
 let animationFrameID;
 let initialCell = 0;
 
+
 /**
  * EVT LISTENERS
  */
+
 
 startBtn.addEventListener('click', () => {
     tick();
@@ -43,12 +46,18 @@ stopBtn.addEventListener('click', () => {
 
 resetBtn.addEventListener('click', () => {
     window.cancelAnimationFrame(animationFrameID);
-    setup();
-})
-
-canvas.addEventListener('click', (e) => {
-    const { offsetX, offsetY } = e;
+    current.visited = false;
+    current.cellColor = "black";
+    current = undefined;
+    stack = new Array();
+    grid = new Array();
+    setup(grid[0]);
 });
+
+speed.addEventListener("change", () => {
+    maxFps = parseInt(speed.value);
+}, false);
+
 
 class Cell {
     constructor(x, y, w, h) {
@@ -191,7 +200,7 @@ const fillGrid = () => {
         }
     }
     // 1. Choose the initial cell
-    current = grid[initialCell];
+    current = grid[0];
 }
 
 const drawGrid = () => {
@@ -215,8 +224,7 @@ const drawGrid = () => {
         current = next;
     } if (!next && stack.length) {
         current = stack.pop();
-        current.cellColor = currentCellColor;
-        // current.cellColor = currentCellColor;
+        current.cellColor = "purple";
     }
 }
 
